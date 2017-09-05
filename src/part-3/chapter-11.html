@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Kan Extensions</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <h1>Kan Extensions</h1>
+  <p>So far we've been mostly working with a single category or a pair of categories. In some cases that was a little too constraining. For instance, when defining a limit in a category <i>C</i>, we introduced an index category <code>I</code> as the template for the pattern that would form the basis for our cones. It would have made sense to introduce another category, a trivial one, to serve as a template for the apex of the cone. Instead we used the constant functor <code>Δ<sub>c</sub></code> from <code>I</code> to <code>C</code>.</p>
+  <p>It's time to fix this awkwardness. Let's define a limit using three categories. Let's start with the functor <code>D</code> from the index category <i>I</i> to <i>C</i>. This is the functor that selects the base of the cone — the diagram functor.</p>
+  <figure>
+    <img alt="Kan 1" src="../images/363D32DF63.jpg"/>
+  </figure>
+  <p>The new addition is the category <b>1</b> that contains a single object (and a single identity morphism). There is only one possible functor <code>K</code> from <i>I</i> to this category. It maps all objects to the only object in <b>1</b>, and all morphisms to the identity morphism. Any functor <code>F</code> from <b>1</b> to <i>C</i> picks a potential apex for our cone.</p>
+  <figure>
+    <img alt="Kan 2" src="../images/2636A9EBE9.jpg"/>
+  </figure>
+  <p>A cone is a natural transformation <code>ε</code> from <code>F ∘ K</code> to <code>D</code>. Notice that <code>F ∘ K</code> does exactly the same thing as our original <code>Δ<sub>c</sub></code>. The following diagram shows this transformation.</p>
+  <figure>
+    <img alt="Kan 3" src="../images/CB51AD3800.jpg"/>
+  </figure>
+  <p>We can now define a universal property that picks the “best” such functor <code>F</code>. This <code>F</code> will map <b>1</b> to the object that is the limit of <code>D</code> in <i>C</i>, and the natural transformation <code>ε</code> from <code>F ∘ K</code> to <code>D</code> will provide the corresponding projections. This universal functor is called the right Kan extension of <code>D</code> along <code>K</code> and is denoted by <code>Ran<sub>K</sub>D</code>.</p>
+  <p>Let's formulate the universal property. Suppose we have another cone — that is another functor <code>F'</code> together with a natural transformation <code>ε'</code> from <code>F' ∘ K</code> to <code>D</code>.</p>
+  <figure>
+    <img alt="Kan 4" src="../images/39CCD72EE8.jpg"/>
+  </figure>
+  <p>If the Kan extension <code>F = Ran<sub>K</sub>D</code> exists, there must be a unique natural transformation <code>σ</code> from <code>F'</code> to it, such that <code>ε'</code> factorizes through <code>ε</code>, that is:</p>
+  <pre>ε' = ε . (σ ∘ K)</pre>
+  <p>Here, <code>σ ∘ K</code> is the horizontal composition of two natural transformations (one of them being the identity natural transformation on <code>K</code>). This transformation is then vertically composed with <code>ε</code>.</p>
+  <figure>
+    <img alt="Kan 5" src="../images/BCD1854D32.jpg"/>
+  </figure>
+  <p>In components, when acting on an object <code>i</code> in <i>I</i>, we get:</p>
+  <pre>ε'<sub>i</sub> = ε<sub>i</sub> ∘ σ<sub> K i</sub></pre>
+  <p>In our case, <code>σ</code> has only one component corresponding to the single object of <b>1</b>. So, indeed, this is the unique morphism from the apex of the cone defined by <code>F'</code> to the apex of the universal cone defined by <code>Ran<sub>K</sub>D</code>. The commuting conditions are exactly the ones required by the definition of a limit.</p>
+  <p>But, importantly, we are free to replace the trivial category <b>1</b> with an arbitrary category <i>A</i>, and the definition of the right Kan extension remains valid.</p>
+
+  <h2>Right Kan Extension</h2>
+  <p>The right Kan extension of the functor <code>D::I-&gt;C</code> along the functor <code>K::I-&gt;A</code> is a functor <code>F::A-&gt;C</code> (denoted <code>Ran<sub>K</sub>D</code>) together with a natural transformation</p>
+  <pre>ε :: F ∘ K -&gt; D</pre>
+  <p>such that for any other functor <code>F'::A-&gt;C</code> and a natural transformation</p>
+  <pre>ε' :: F' ∘ K -&gt; D</pre>
+  <p>there is a unique natural transformation</p>
+  <pre>σ :: F' -&gt; F</pre>
+  <p>that factorizes <code>ε'</code>:</p>
+  <pre>ε' = ε . (σ ∘ K)</pre>
+  <p>This is quite a mouthful, but it can be visualized in this nice diagram:</p>
+  <figure>
+    <img alt="Right Kan 1" src="../images/B185E8780B.jpg"/>
+  </figure>
+  <p>An interesting way of looking at this is to notice that, in a sense, the Kan extension acts like the inverse of “functor multiplication.” Some authors go as far as use the notation <code>D/K</code> for <code>Ran<sub>K</sub>D</code>. Indeed, in this notation, the definition of <code>ε</code>, which is also called the counit of the right Kan extension, looks like simple cancellation:</p>
+  <pre>ε :: D/K ∘ K -&gt; D</pre>
+  <p>There is another interpretation of Kan extensions. Consider that the functor <code>K</code> embeds the category <i>I</i> inside <i>A</i>. In the simplest case <i>I</i> could just be a subcategory of <i>A</i>. We have a functor <code>D</code> that maps <i>I</i> to <i>C</i>. Can we extend <code>D</code> to a functor <code>F</code> that is defined on the whole of <i>A</i>? Ideally, such an extension would make the composition <code>F ∘ K</code> be isomorphic to <code>D</code>. In other words, <code>F</code> would be extending the domain of <code>D</code> to <code>A</code>. But a full-blown isomorphism is usually too much to ask, and we can do with just half of it, namely a one-way natural transformation <code>ε</code> from <code>F ∘ K</code> to <code>D</code>. (The left Kan extension picks the other direction.)</p>
+  <figure>
+    <img alt="Right Kan 2" src="../images/B1B1FC4B29.jpg"/>
+  </figure>
+  Of course, the embedding picture breaks down when the functor <code>K</code> is not injective on objects or not faithful on hom-sets, as in the example of the limit. In that case, the Kan extension tries its best to extrapolate the lost information.</p>
+
+  <h2>Kan Extension as Adjunction</h2>
+  <p>Now suppose that the right Kan extension exists for any <code>D</code> (and a fixed <code>K</code>). In that case <code>Ran<sub>K </sub>-</code> (with the dash replacing <code>D</code>) is a functor from the functor category <code>[I, C]</code> to the functor category <code>[A, C]</code>. It turns out that this functor is the right adjoint to the precomposition functor <code>-∘K</code>. The latter maps functors in <code>[A, C]</code> to functors in <code>[I, C]</code>. The adjunction is:</p>
+  <pre>[I, C](F' ∘ K, D) ≅ [A, C](F', Ran<sub>K</sub>D)</pre>
+  <p>It is just a restatement of the fact that to every natural transformation we called <code>ε'</code> corresponds a unique natural transformation we called <code>σ</code>.</p>
+  <figure>
+    <img alt="Kan Adjunction" src="../images/A7EEE4BE96.jpg"/>
+  </figure>
+  <p>Furthermore, if we chose the category <i>I</i> to be the same as <i>C</i>, we can substitute the identity functor <code>I<sub>C</sub></code> for <code>D</code>. We get the following identity:</p>
+  <pre>[C, C](F' ∘ K, I<sub>C</sub>) ≅ [A, C](F', Ran<sub>K</sub>I<sub>C</sub>)</pre>
+  <p>We can now chose <code>F'</code> to be the same as <code>Ran<sub>K</sub>I<sub>C</sub></code>. In that case the right hand side contains the identity natural transformation and, corresponding to it, the left hand side gives us the following natural transformation:</p>
+  <pre>ε :: Ran<sub>K</sub>I<sub>C</sub> ∘ K -&gt; I<sub>C</sub></pre>
+  <p>This looks very much like the counit of an adjunction:</p>
+  <pre>Ran<sub>K</sub>I<sub>C</sub> ⊣ K</pre>
+  <p>Indeed, the right Kan extension of the identity functor along a functor <code>K</code> can be used to calculate the left adjoint of <code>K</code>. For that, one more condition is necessary: the right Kan extension must be preserved by the functor <code>K</code>. The preservation of the extension means that, if we calculate the Kan extension of the functor precomposed with <code>K</code>, we should get the same result as precomposing the original Kan extesion with <code>K</code>. In our case, this condition simplifies to:</p>
+  <pre>K ∘ Ran<sub>K</sub>I<sub>C</sub> ≅ Ran<sub>K</sub>K</pre>
+  <p>Notice that, using the division-by-K notation, the adjunction can be written as:</p>
+  <pre>I/K ⊣ K</pre>
+  <p>which confirms our intuition that an adjunction describes some kind of an inverse. The preservation condition becomes:</p>
+  <pre>K ∘ I/K ≅ K/K</pre>
+  <p>The right Kan extension of a functor along itself, <code>K/K</code>, is called a codensity monad.</p>
+  <p>The adjunction formula is an important result because, as we'll see soon, we can calculate Kan extensions using ends (coends), thus giving us practical means of finding right (and left) adjoints.</p>
+
+  <h2>Left Kan Extension</h2>
+  <p>There is a dual construction that gives us the left Kan extension. To build some intuition, we'll can start with the definition of a colimit and restructure it to use the singleton category <b>1</b>. We build a cocone by using the functor <code>D::I-&gt;C</code> to form its base, and the functor <code>F::1-&gt;C</code> to select its apex.</p>
+  <figure>
+    <img alt="Left Kan 1" src="../images/5676314194.jpg"/>
+  </figure>
+  <p>The sides of the cocone, the injections, are components of a natural transformation <code>η</code> from <code>D</code> to <code>F ∘ K</code>.</p>
+  <figure>
+    <img alt="Left Kan 2" src="../images/3BF66DAF38.jpg"/>
+  </figure>
+  <p>The colimit is the universal cocone. So for any other functor <code>F'</code> and a natural transformation</p>
+  <pre>η' :: D -&gt; F'∘ K</pre>
+  <figure>
+    <img alt="Left Kan 3" src="../images/8CDC41778F.jpg"/>
+  </figure>
+  <p>there is a unique natural transformation <code>σ</code> from <code>F</code> to <code>F'</code></p>
+  <figure>
+    <img alt="Left Kan 4" src="../images/ECB20572B1.jpg"/>
+  </figure>
+  <p>such that:</p>
+  <pre>η' = (σ ∘ K) . η</pre>
+  <p>This is illustrated in the following diagram:<br />
+  <figure>
+    <img alt="Left Kan 5" src="../images/4D538069BA.jpg"/>
+  </figure>
+  <p>Replacing the singleton category <b>1</b> with <i>A</i>, this definition naturally generalized to the definition of the left Kan extension, denoted by <code>Lan<sub>K</sub>D</code>.<br />
+  <figure>
+    <img alt="Left Kan 6" src="../images/4B430100E8.jpg"/>
+  </figure>
+  The natural transformation:</p>
+  <pre>η :: D -&gt; Lan<sub>K</sub>D ∘ K</pre>
+  <p>is called the unit of the left Kan extension.</p>
+  <p>As before, we can recast the one-to-one correspondence between natural transformations:</p>
+  <pre>η' = (σ ∘ K) . η</pre>
+  <p>in terms of the adjunction:</p>
+  <pre>[A, C](Lan<sub>K</sub>D, F') ≅ [I, C](D, F' ∘ K)</pre>
+  <p>In other words, the left Kan extension is the left adjoint, and the right Kan extension is the right adjoint of the postcomposition with <code>K</code>.</p>
+  <p>Just like the right Kan extension of the identity functor could be used to calculate the left adjoint of <code>K</code>, the left Kan extension of the identity functor turns out to be the right adjoint of <code>K</code> (with <code>η</code> being the unit of  the adjunction):</p>
+  <pre>K ⊣ Lan<sub>K</sub>I<sub>C</sub></pre>
+  <p>Combining the two results, we get:</p>
+  <pre>Ran<sub>K</sub>I<sub>C</sub> ⊣ K ⊣ Lan<sub>K</sub>I<sub>C</sub></pre>
+
+  <h2>Kan Extensions as Ends</h2>
+  <p>The real power of Kan extensions comes from the fact that they can be calculated using ends (and coends). For simplicity, we'll restrict our attention to the case where the target category <i>C</i> is <b>Set</b>, but the formulas can be extended to any category.</p>
+  <p>Let's revisit the idea that a Kan extension can be used to extend the action of a functor outside of its original domain. Suppose that <code>K</code> embeds <i>I</i> inside <i>A</i>. Functor <code>D</code> maps <i>I</i> to <b>Set</b>. We could just say that for any object <code>a</code> in the image of <code>K</code>, that is <code>a = K i</code>, the extended functor maps <code>a</code> to <code>D i</code>. The problem is, what to do with those objects in <i>A</i> that are outside of the image of <code>K</code>? The idea is that every such object is potentially connected through lots of morphisms to every object in the image of <code>K</code>. A functor must preserve these morphisms. The totality of morphisms from an object <code>a</code> to the image of <code>K</code> is characterized by the hom-functor:</p>
+  <pre>A(a, K -)</pre>
+  <figure>
+    <img alt="Kan Ends" src="../images/1426BFD84F.jpg"/>
+  </figure>
+  Notice that this hom-functor is a composition of two functors:</p>
+  <pre>A(a, K -) = A(a, -) ∘ K</pre>
+  <p>The right Kan extension is the right adjoint of functor composition:</p>
+  <pre>[I, Set](F' ∘ K, D) ≅ [A, Set](F', Ran<sub>K</sub>D)</pre>
+  <p>Let's see what happens when we replace <code>F'</code> with the hom functor:</p>
+  <pre>[I, Set](A(a, -) ∘ K, D) ≅ [A, Set](A(a, -), Ran<sub>K</sub>D)</pre>
+  <p>and then inline the composition:</p>
+  <pre>[I, Set](A(a, K -), D) ≅ [A, Set](A(a, -), Ran<sub>K</sub>D)</pre>
+  <p>The right hand side can be reduced using the Yoneda lemma:</p>
+  <pre>[I, Set](A(a, K -), D) ≅ Ran<sub>K</sub>D a</pre>
+  <p>We can now rewrite the set of natural transformations as the end to get this very convenient formula for the right Kan extension:</p>
+  <pre>Ran<sub>K</sub>D a ≅ ∫<sub>i</sub> Set(A(a, K i), D i)</pre>
+  <p>There is an analogous formula for the left Kan extension in terms of a coend:</p>
+  <pre>Lan<sub>K</sub>D a = ∫<sup>i</sup> A(K i, a) × D i</pre>
+  <p>To see that this is the case, we'll show that this is indeed the left adjoint to functor composition:</p>
+  <pre>[A, Set](Lan<sub>K</sub>D, F') ≅ [I, Set](D, F'∘ K)</pre>
+  <p>Let's substitute our formula in the left hand side:</p>
+  <pre>[A, Set](∫<sup>i</sup> A(K i, -) × D i, F')</pre>
+  <p>This is a set of natural transformations, so it can be rewritten as an end:</p>
+  <pre>∫<sub>a</sub> Set(∫<sup>i</sup> A(K i, a) × D i, F'a)</pre>
+  <p>Using the continuity of the hom-functor, we can replace the coend with the end:</p>
+  <pre>∫<sub>a</sub> ∫<sub>i</sub> Set(A(K i, a) × D i, F'a)</pre>
+  <p>We can use the product-exponential adjunction:</p>
+  <pre>∫<sub>a</sub> ∫<sub>i</sub> Set(A(K i, a), (F'a)<sup>D i</sup>)</pre>
+  <p>The exponential is isomorphic to the corresponding hom-set:</p>
+  <pre>∫<sub>a</sub> ∫<sub>i</sub> Set(A(K i, a), A(D i, F'a))</pre>
+  <p>There is a theorem called the Fubini theorem that allows us to swap the two ends:</p>
+  <pre>∫<sub>i</sub> ∫<sub>a</sub> Set(A(K i, a), A(D i, F'a))</pre>
+  <p>The inner end represents the set of natural transformations between two functors, so we can use the Yoneda lemma:</p>
+  <pre>∫<sub>i</sub> A(D i, F'(K i))</pre>
+  <p>This is indeed the set of natural transformations that forms the right hand side of the adjunction we set out to prove:</p>
+  <pre>[I, Set](D, F'∘ K)</pre>
+  <p>These kinds of calculations using ends, coends, and the Yoneda lemma are pretty typical for the “calculus” of ends.</p>
+
+  <h2>Kan Extensions in Haskell</h2>
+  <p>The end/coend formulas for Kan extensions can be easily translated to Haskell. Let's start with the right extension:</p>
+  <pre>Ran<sub>K</sub>D a ≅ ∫<sub>i</sub> Set(A(a, K i), D i)</pre>
+  <p>We replace the end with the universal quantifier, and hom-sets with function types:</p>
+  <pre>newtype Ran k d a = Ran (forall i. (a -&gt; k i) -&gt; d i)</pre>
+  <p>Looking at this definition, it's clear that <code>Ran</code> must contain a value of type <code>a</code> to which the function can be applied, and a natural transformation between the two functors <code>k</code> and <code>d</code>. For instance, suppose that <code>k</code> is the tree functor, and <code>d</code> is the list functor, and you were given a <code>Ran Tree [] String</code>. If you pass it a function:</p>
+  <pre>f :: String -&gt; Tree Int</pre>
+  <p>you'll get back a list of <code>Int</code>, and so on. The right Kan extension will use your function to produce a tree and then repackage it into a list. For instance, you may pass it a parser that generates a parsing tree from a string, and you'll get a list that corresponds to the depth-first traversal of this tree.</p>
+  <p>The right Kan extension can be used to calculate the left adjoint of a given functor by replacing the functor <code>d</code> with the identity functor. This leads to the left adjoint of a functor <code>k</code> being represented by the set of polymorphic functions of the type:</p>
+  <pre>forall i. (a -&gt; k i) -&gt; i</pre>
+  <p>Suppose that <code>k</code> is the forgetful functor from the category of monoids. The universal quantifier then goes over all monoids. Of course, in Haskell we cannot express monoidal laws, but the following is a decent approximation of the resulting free functor (the forgetful functor <code>k</code> is an identity on objects):</p>
+  <pre>type Lst a = forall i. Monoid i =&gt; (a -&gt; i) -&gt; i</pre>
+  <p>As expected, it generates free monoids, or Haskell lists:</p>
+  <pre>toLst :: [a] -&gt; Lst a
+toLst as = \f -&gt; foldMap f as
+  
+fromLst :: Lst a -&gt; [a]
+fromLst f = f (\a -&gt; [a])</pre>
+  <p>The left Kan extension is a coend:</p>
+  <pre>Lan<sub>K</sub>D a = ∫<sup>i</sup> A(K i, a) × D i</pre>
+  <p>so it translates to an existential quantifier. Symbolically:</p>
+  <pre>Lan k d a = exists i. (k i -&gt; a, d i)</pre>
+  <p>This can be encoded in Haskell using GADTs, or using a universally quantified data constructor:</p>
+  <pre>data Lan k d a = forall i. Lan (k i -&gt; a) (d i)</pre>
+  <p>The interpretation of this data structure is that it contains a function that takes a container of some unspecified <code>i</code>s and produces an <code>a</code>. It also has a container of those <code>i</code>s. Since you have no idea what <code>i</code>s are, the only thing you can do with this data structure is to retrieve the container of <code>i</code>s, repack it into the container defined by the functor <code>k</code> using a natural transformation, and call the function to obtain the <code>a</code>. For instance, if <code>d</code> is a tree, and <code>k</code> is a list, you can serialize the tree, call the function with the resulting list, and obtain an <code>a</code>.</p>
+  <p>The left Kan extension can be used to calculate the right adjoint of a functor. We know that the right adjoint of the product functor is the exponential, so let's try to implement it using the Kan extension:</p>
+  <pre>type Exp a b = Lan ((,) a) I b</pre>
+  <p>This is indeed isomorphic to the function type, as witnessed by the following pair of functions:</p>
+  <pre>toExp :: (a -&gt; b) -&gt; Exp a b
+toExp f = Lan (f . fst) (I ())
+
+fromExp :: Exp a b -&gt; (a -&gt; b)
+fromExp (Lan f (I x)) = \a -&gt; f (a, x)</pre>
+  <p>Notice that, as described earlier in the general case, we performed the following steps: (1) retrieved the container of <code>x</code> (here, it's just a trivial identity container), and the function <code>f</code>, (2) repackaged the container using the natural transformation between the identity functor and the pair functor, and (3) called the function <code>f</code>.</p>
+
+<h2>Free Functor</h2>
+  <p>An interesting application of Kan extensions is the construction of a free functor. It's the solution to the following practical problem: suppose you have a type constructor — that is a mapping of objects. Is it possible to define a functor based on this type constructor? In other words, can we define a mapping of morphisms that would extend this type constructor to a full-blown endofunctor? </p>
+  <p>The key observation is that a type constructor can be described as a functor whose domain is a discrete category. A discrete category has no morphisms other than the identity morphisms. Given a category <i>C</i>, we can always construct a discrete category <i>|C|</i> by simply discarding all non-identity morphisms. A functor <code>F</code> from <i>|C|</i> to <i>C</i> is then a simple mapping of objects, or what we call a type constructor in Haskell. There is also a canonical functor <code>J</code> that injects <i>|C|</i> into <i>C</i>: it's an identity on objects (and on identity morphisms). The left Kan extension of <code>F</code> along <code>J</code>, if it exists, is then a functor for <i>C</i> to <i>C</i>:</p>
+  <pre>Lan<sub>J</sub> F a = ∫<sup>i</sup> C(J i, a) × F i</pre>
+  <p>It's called a free functor based on <code>F</code>. </p>
+  <p>In Haskell, we would write it as:</p>
+  <pre>data FreeF f a = forall i. FMap (i -&gt; a) (f i)</pre>
+  <p>Indeed, for any type constructor <code>f</code>, <code>FreeF f</code> is a functor:</p>
+  <pre>instance Functor (FreeF f) where
+  fmap g (FMap h fi) = FMap (g . h) fi</pre>
+  <p>As you can see, the free functor fakes the lifting of a function by recording both the function and its argument. It accumulates the lifted functions by recording their composition. Functor rules are automatically satisfied. This construction was used in a paper <a href="http://okmij.org/ftp/Haskell/extensible/more.pdf">Freer Monads, More Extensible Effects</a>.</p>
+  <p>Alternatively, we can use the right Kan extension for the same purpose:</p>
+  <pre>newtype FreeF f a = FreeF (forall i. (a -&gt; i) -&gt; f i)</pre>
+  <p>It's easy to check that this is indeed a functor:</p>
+  <pre>instance Functor (FreeF f) where
+  fmap g (FreeF r) = FreeF (\bi -&gt; r (bi . g))</pre>
+</body>
+
+</html>

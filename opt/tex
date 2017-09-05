@@ -1,0 +1,11 @@
+\LetLtxMacro{\OldIncludegraphics}{\includegraphics}
+
+\usepackage[export]{adjustbox}
+\renewcommand{\includegraphics}[2][]{
+  \begin{center}
+    \OldIncludegraphics[max width=10cm,max height=6cm,#1]{#2}
+  \end{center}}
+
+\renewcommand{\floatpagefraction}{.8}%
+
+\newcommand{\sectionbreak}{\clearpage}

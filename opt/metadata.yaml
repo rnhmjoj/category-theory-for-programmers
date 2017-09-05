@@ -1,0 +1,14 @@
+---
+title:
+- type: main
+  text: Category Theory for Programmers
+- type: subtitle
+  text: by Bartosz Milewski
+creator:
+- role: author
+  text: Bartosz Milewski
+- role: editor
+  text: Michele Guerini Rocco
+rights: © 2017 Bartosz Milewski
+stylesheet: style.css
+...

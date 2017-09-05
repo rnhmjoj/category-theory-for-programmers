@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Enriched Categories</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <h1>Enriched Categories</h1>
+  <p>A category is <em>small</em> if its objects form a set. But we know that there are things larger than sets. Famously, a set of all sets cannot be formed within the standard set theory (the Zermelo-Fraenkel theory, optionally augmented with the Axiom of Choice). So a category of all sets must be large. There are mathematical tricks like Grothendieck universes that can be used to define collections that go beyond sets. These tricks let us talk about large categories.</p>
+  <p>A category is <em>locally small</em> if morphisms between any two objects form a set. If they don't form a set, we have to rethink a few definitions. In particular, what does it mean to compose morphisms if we can't even pick them from a set? The solution is to bootstrap ourselves by replacing hom-sets, which are objects in <b>Set</b>, with <em>objects</em> from some other category <i>V</i>. The difference is that, in general, objects don't have elements, so we are no longer allowed to talk about individual morphisms. We have to define all properties of an <em>enriched</em> category in terms of operations that can be performed on hom-objects as a whole. In order to do that, the category that provides hom-objects must have additional structure — it must be a monoidal category. If we call this monoidal category <i>V</i>, we can talk about a category <i>C</i> enriched over <i>V</i>.</p>
+  <p>Beside size reasons, we might be interested in generalizing hom-sets to something that has more structure than mere sets. For instance, a traditional category doesn't have the notion of a distance between objects. Two objects are either connected by morphisms or not. All objects that are connected to a given object are its neighbors. Unlike in real life; in a category, a friend of a friend of a friend is as close to me as my bosom buddy. In a suitably enriched category, we can define distances between objects.</p>
+  <p>There is one more very practical reason to get some experience with enriched categories, and that's because a very useful online source of categorical knowledge, the <a href="https://ncatlab.org">nLab</a>, is written mostly in terms of enriched categories.</p>
+
+  <h2>Why Monoidal Category?</h2>
+  <p>When constructing an enriched category we have to keep in mind that we should be able to recover the usual definitions when we replace the monoidal category with <b>Set</b> and hom-objects with hom-sets. The best way to accomplish this is to start with the usual definitions and keep reformulating them in a point-free manner — that is, without naming elements of sets.</p>
+  <p>Let's start with the definition of composition. Normally, it takes a pair of morphisms, one from <code>C(b, c)</code> and one from <code>C(a, b)</code> and maps it to a morphism from <code>C(a, c)</code>. In other words it's a mapping:</p>
+  <pre>C(b, c) × C(a, b) -&gt; C(a, c)</pre>
+  <p>This is a function between sets — one of them being the cartesian product of two hom-sets. This formula can be easily generalized by replacing cartesian product with something more general. A categorical product would work, but we can go even further and use a completely general tensor product.</p>
+  <p>Next come the identity morphisms. Instead of picking individual elements from hom-sets, we can define them using functions from the singleton set <b>1</b>:</p>
+  <pre>j<sub>a</sub> :: <b>1</b> -&gt; C(a, a)</pre>
+  <p>Again, we could replace the singleton set with the terminal object, but we can go even further by replacing it with the unit <code>i</code> of the tensor product.</p>
+  <p>As you can see, objects taken from some monoidal category <i>V</i> are good candidates for hom-set replacement. </p>
+
+  <h2>Monoidal Category</h2>
+  <p>We've talked about monoidal categories before, but it's worth restating the definition. A monoidal category defines a tensor product that is a bifunctor:</p>
+  <pre>⊗ :: V × V -&gt; V</pre>
+  <p>We want the tensor product to be associative, but it's enough to satisfy associativity up to natural isomorphism. This isomorphism is called the associator. Its components are:</p>
+  <pre>α<sub>a b c</sub> :: (a ⊗ b) ⊗ c -&gt; a ⊗ (b ⊗ c)</pre>
+  <p>It must be natural in all three arguments.</p>
+  <p>A monoidal category must also define a special unit object <code>i</code> that serves as the unit of the tensor product; again, up to natural isomorphism. The two isomorphisms are called, respectively, the left and the right unitor, and their components are:</p>
+  <pre>λ<sub>a</sub> :: i ⊗ a -&gt; a
+ρ<sub>a</sub> :: a ⊗ i -&gt; a</pre>
+  <p>The associator and the unitors must satisfy coherence conditions:</p>
+  <figure>
+    <img alt="Associativity" src="../images/95696EB742.jpg"/>
+  </figure>
+  <figure>
+    <img alt="Identity coherence" src="../images/D0942FBA8F.jpg"/>
+  </figure>
+  <p>A monoidal category is called <i>symmetric</i> if there is a natural isomorphism with components:</p>
+  <pre>γ<sub>a b</sub> :: a ⊗ b -&gt; b ⊗ a</pre>
+  <p>whose “square is one”:</p>
+
+  <pre>γ<sub>b a</sub> ∘ γ<sub>a b</sub> = id<sub>a&otimes;b</sub></pre>
+  <p>and which is consistent with the monoidal structure.</p>
+  <p>An interesting thing about monoidal categories is that you may be able to define the internal hom (the function object) as the right adjoint to the tensor product. You may recall that the standard definition of the function object, or the exponential, was through the right adjoint to the categorical product. A category in which such an object existed for any pair of objects was called cartesian closed. Here is the adjunction that defines the internal hom in a monoidal category:</p>
+  <pre>V(a ⊗ b, c) ~ V(a, [b, c])</pre>
+  <p>Following <a href="http://www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf">G. M. Kelly</a>, I'm using the notation <code>[b, c]</code> for the internal hom. The counit of this adjunction is the natural transformation whose components are called evaluation morphisms:</p>
+  <pre>ε<sub>a b</sub> :: ([a, b] ⊗ a) -&gt; b</pre>
+  <p>Notice that, if the tensor product is not symmetric, we may define another internal hom, denoted by <code>[[a, c]]</code>, using the following adjunction:</p>
+  <pre>V(a ⊗ b, c) ~ V(b, [[a, c]])</pre>
+  <p>A monoidal category in which both are defined is called biclosed. An example of a category that is not biclosed is the category of endofunctors in <b>Set</b>, with functor composition serving as tensor product. That's the category we used to define monads.</p>
+
+  <h2>Enriched Category</h2>
+  <p>A category <i>C</i> enriched over a monoidal category <i>V</i> replaces hom-sets with hom-objects. To every pair of objects <code>a</code> and <code>b</code> in <i>C</i> we associate an object <code>C(a, b)</code> in <i>V</i>. We use the same notation for hom-objects as we used for hom-sets, with the understanding that they don't contain morphisms. On the other hand, <i>V</i> is a regular (non-enriched) category with hom-sets and morphisms. So we are not entirely rid of sets — we just swept them under the rug.</p>
+  <p>Since we cannot talk about individual morphisms in <i>C</i>, composition of morphisms is replaced by a family of morphisms in <i>V</i>:</p>
+  <pre>∘ :: C(b, c) ⊗ C(a, b) -&gt; C(a, c)</pre>
+  <figure>
+    <img alt="Composition" src="../images/181429D377.jpg"/>
+  </figure>
+  Similarly, identity morphisms are replaced by a family of morphisms in <i>V</i>:</p>
+  <pre>j<sub>a</sub> :: i -&gt; C(a, a)</pre>
+  <p>where <code>i</code> is the tensor unit in <i>V</i>.</p>
+  <figure>
+    <img alt="Idendity" src="../images/8587D532B3.jpg"/>
+  </figure>
+  <p>Associativity of composition is defined in terms of the associator in <i>V</i>:</p>
+  <figure>
+    <img alt="Composition coherence" src="../images/2E3E58135B.jpg"/>
+  </figure>
+  <p>Unit laws are likewise expressed in terms of unitors:</p>
+  <figure>
+    <img alt="Right identity" src="../images/32D64937B7.jpg"/>
+  </figure>
+  <figure>
+    <img alt="Left identity" src="../images/A537B41E24.jpg"/>
+  </figure>
+
+  <h2>Preorders</h2>
+  <p>A preorder is defined as a thin category, one in which every hom-set is either empty or a singleton. We interpret a non-empty set <code>C(a, b)</code> as the proof that <code>a</code> is less than or equal to <code>b</code>. Such a category can be interpreted as enriched over a very simple monoidal category that contains just two objects, 0 and 1 (sometimes called False and True). Besides the mandatory identity morphisms, this category has a single morphism going from 0 to 1, let's call it <code>0-&gt;1</code>. A simple monoidal structure can be established in it, with the tensor product modeling the simple arithmetic of 0 and 1 (i.e., the only non-zero product is <code>1⊗1</code>). The identity object in this category is 1. This is a strict monoidal category, that is, the associator and the unitors are identity morphisms.</p>
+  <p>Since in a preorder the-hom set is either empty or a singleton, we can easily replace it with a hom-object from our tiny category. The enriched preorder <i>C</i> has a hom-object <code>C(a, b)</code> for any pair of objects <code>a</code> and <code>b</code>. If <code>a</code> is less than or equal to <code>b</code>, this object is 1; otherwise it's 0.</p>
+  <p>Let's have a look at composition. The tensor product of any two objects is 0, unless both of them are 1, in which case it's 1. If it's 0, then we have two options for the composition morphism: it could be either <code>id<sub>0</sub></code> or <code>0-&gt;1</code>. But if it's 1, then the only option is <code>id<sub>1</sub></code>. Translating this back to relations, this says that if <code>a &lt;= b</code> and <code>b &lt;= c</code> then <code>a &lt;= c</code>, which is exactly the transitivity law we need.</p>
+  <p>What about the identity? It's a morphism from 1 to <code>C(a, a)</code>. There is only one morphism going from 1, and that's the identity <code>id<sub>1</sub></code>, so <code>C(a, a)</code> must be 1. It means that <code>a &lt;= a</code>, which is the reflexivity law for a preorder. So both transitivity and reflexivity are automatically enforced, if we implement a preorder as an enriched category.</p>
+
+  <h2>Metric Spaces</h2>
+  <p>An interesting example is due to <a href="http://www.tac.mta.ca/tac/reprints/articles/1/tr1.pdf">William Lawvere</a>. He noticed that metric spaces can be defined using enriched categories. A metric space defines a distance between any two objects. This distance is a non-negative real number. It's convenient to include inifinity as a possible value. If the distance is infinite, there is no way of getting from the starting object to the target object.</p>
+  <p>There are some obvious properties that have to be satisfied by distances. One of them is that the distance from an object to itself must be zero. The other is the triangle inequality: the direct distance is no larger than the sum of distances with intermediate stops. We don't require the distance to be symmetric, which might seem weird at first but, as Lawvere explained, you can imagine that in one direction you're walking uphill, while in the other you're going downhill. In any case, symmetry may be imposed later as an additional constraint.</p>
+  <p>So how can a metric space be cast into a categorical language? We have to construct a category in which hom-objects are distances. Mind you, distances are not morphisms but hom-objects. How can a hom-object be a number? Only if we can construct a monoidal category <i>V</i> in which these numbers are objects. Non-negative real numbers (plus infinity) form a total order, so they can be treated as a thin category. A morphism between two such numbers <code>x</code> and <code>y</code> exists if and only if <code>x &gt;= y</code> (note: this is the opposite direction to the one traditionally used in the definition of a preorder). The monoidal structure is given by addition, with zero serving as the unit object. In other words, the tensor product of two numbers is their sum.</p>
+  <p>A metric space is a category enriched over such monoidal category. A hom-object <code>C(a, b)</code> from object <code>a</code> to <code>b</code> is a non-negative (possibly infinite) number that we will call the distance from <code>a</code> to <code>b</code>. Let's see what we get for identity and composition in such a category.</p>
+  <p>By our definitions, a morphism from the tensorial unit, which is the number zero, to a hom-object <code>C(a, a)</code> is the relation:</p>
+  <pre>0 &gt;= C(a, a)</pre>
+  <p>Since <code>C(a, a)</code> is a non-negative number, this condition tells us that the distance from <code>a</code> to <code>a</code> is always zero. Check!</p>
+  <p>Now let's talk about composition. We start with the tensor product of two abutting hom-objects, <code>C(b, c)⊗C(a, b)</code>. We have defined the tensor product as the sum of the two distances. Composition is a morphism in <i>V</i> from this product to <code>C(a, c)</code>. A morphism in <i>V</i> is defined as the greater-or-equal relation. In other words, the sum of distances from <code>a</code> to <code>b</code> and from <code>b</code> to <code>c</code> is greater than or equal to the distance from <code>a</code> to <code>c</code>. But that's just the standard triangle inequality. Check!</p>
+  <p>By re-casting the metric space in terms of an enriched category, we get the triangle inequality and the zero self-distance “for free.”</p>
+
+  <h2>Enriched Functors</h2>
+  <p>The definition of a functor involves the mapping of morphisms. In the enriched setting, we don't have the notion of individual morphisms, so we have to deal with hom-objects in bulk. Hom-objects are objects in a monoidal category <i>V</i>, and we have morphisms between them at our disposal. It therefore makes sense to define enriched functors between categories when they are enriched over the same monoidal category <i>V</i>. We can then use morphisms in <i>V</i> to map the hom-objects between two enriched categories.</p>
+  <p>An <em>enriched functor</em> <code>F</code> between two categories <i>C</i> and <i>D</i>, besides mapping objects to objects, also assigns, to every pair of objects in <i>C</i>, a morphism in <i>V</i>:</p>
+  <pre>F<sub>a b</sub> :: C(a, b) -&gt; D(F a, F b)</pre>
+  <p>A functor is a structure-preserving mapping. For regular functors it meant preserving composition and identity. In the enriched setting, the preservation of composition means that the following diagram commute:</p>
+  <figure>
+    <img alt="Functor composition" src="../images/240AA5ADD6.jpg"/>
+  </figure>
+  <p>The preservation of identity is replaced by the preservation of the morphisms in <i>V</i> that “select” the identity:</p>
+  <figure>
+    <img alt="Functor identity" src="../images/CFB2255A75.jpg"/>
+  </figure>
+
+  <h2>Self Enrichment</h2>
+  <p>A closed symmetric monoidal category may be self-enriched by replacing hom-sets with internal homs (see the definition above). To make this work, we have to define the composition law for internal homs. In other words, we have to implement a morphism with the following signature:</p>
+  <pre>[b, c] ⊗ [a, b] -&gt; [a, c]</pre>
+  <p>This is not much different from any other programming task, except that, in category theory, we usually use point free implementations. We start by specifying the set whose element it's supposed to be. In this case, it's a member of the hom-set:</p>
+  <pre>V([b, c] ⊗ [a, b], [a, c])</pre>
+  <p>This hom-set is isomorphic to:</p>
+  <pre>V(([b, c] ⊗ [a, b]) ⊗ a, c)</pre>
+  <p>I just used the adjunction that defined the internal hom <code>[a, c]</code>. If we can build a morphism in this new set, the adjunction will point us at the morphism in the original set, which we can then use as composition. We construct this morphism by composing several morphisms that are at our disposal. To begin with, we can use the associator <code>α<sub>[b, c] [a, b] a</sub></code> to reassociate the expression on the left:</p>
+  <pre>([b, c] ⊗ [a, b]) ⊗ a -&gt; [b, c] ⊗ ([a, b] ⊗ a)</pre>
+  <p>We can follow it with the co-unit of the adjunction <code>ε<sub>a b</sub></code>:</p>
+  <pre>[b, c] ⊗ ([a, b] ⊗ a) -&gt; [b, c] ⊗ b</pre>
+  <p>And use the counit <code>ε<sub>b c</sub></code> again to get to <code>c</code>. We have thus constructed a morphism:</p>
+  <pre>ε<sub>b c</sub> . (id<sub>[b, c]</sub> &otimes; ε<sub>a b</sub>) . α<sub>[b, c] [a, b] a</sub></pre>
+  <p>that is an element of the hom-set:</p>
+  <pre>V(([b, c] ⊗ [a, b]) ⊗ a, c)</pre>
+  <p>The adjunction will give us the composition law we were looking for.</p>
+  <p>Similarly, the identity:</p>
+  <pre>j<sub>a</sub> :: i -&gt; [a, a]</pre>
+  <p>is a member of the following hom-set:</p>
+  <pre>V(i, [a, a])</pre>
+  <p>which is isomorphic, through adjunction, to:</p>
+  <pre> V(i ⊗ a, a)</pre>
+  <p>We know that this hom-set contains the left identity <code>λ<sub>a</sub></code>. We can define <code>j<sub>a</sub></code> as its image under the adjunction.</p>
+  <p>A practical example of self-enrichment is the category <b>Set</b> that serves as the prototype for types in programming languages. We've seen before that it's a closed monoidal category with respect to cartesian product. In <b>Set</b>, the hom-set between any two sets is itself a set, so it's an object in <b>Set</b>. We know that it's isomorphic to the exponential set, so the external and the internal homs are equivalent. Now we also know that, through self-enrichment, we can use the exponential set as the hom-object and express composition in terms of cartesian products of exponential objects.</p>
+
+  <h2>Relation to 2-Categories</h2>
+  <p>I talked about 2-categories in the context of <b>Cat</b>, the category of (small) categories. The morphisms between categories are functors, but there is an additional structure: natural transformations between functors. In a 2-category, the objects are often called zero-cells; morphisms, 1-cells; and morphisms between morphisms, 2-cells. In <b>Cat</b> the 0-cells are categories, 1-cells are functors, and 2-cells are natural transformations.</p>
+  <p>But notice that functors between two categories form a category too; so, in <b>Cat</b>, we really have a <em>hom-category</em> rather than a hom-set. It turns out that, just like <b>Set</b> can be treated as a category enriched over <b>Set</b>, <b>Cat</b> can be treated as a category enriched over <b>Cat</b>. Even more generally, just like every category can be treated as enriched over <b>Set</b>, every 2-category can be considered enriched over <b>Cat</b>.</p>
+</body>
+
+</html>
