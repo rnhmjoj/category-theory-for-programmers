@@ -1,0 +1,97 @@
+@font-face {
+  font-family: "Noto Serif";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Serif"), url("regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Noto Serif Bold";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Serif Bold"), url("bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Noto Serif Bold Italic";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Serif Bold Italic"), url("bold-italic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Noto Serif Italic";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Noto Serif Italic"), url("italic.woff") format("woff");
+}
+
+h1 {
+  font-size: 1.4em;
+}
+
+h2 {
+  font-size: 1.1em;
+}
+
+a:link {
+  color: #6d6137;
+}
+
+body {
+  font-family: "Noto Serif", serif;
+  font-size: 1em;
+
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+figure img {
+  display: block;
+  margin: auto;
+  width: 30vh;
+  min-width: 10em;
+  max-width: 20em;
+  border: 1px solid #696057;
+}
+
+figcaption {
+  margin: 0.4em 2em;
+  text-align: center;
+  color: #5f5f5f;
+}
+
+blockquote {
+  font-style: italic;
+  color: #5f5f5f;
+}
+
+code, pre {
+  font-family: monospace;
+  color: #353535;
+}
+pre {
+  padding: 0.5em 1em;
+  color: #34302d;
+  background-color: #f5e7de;
+}
+
+.red {
+  color: #b23636;
+}
+
+.box {
+  width: 40vw;
+  margin: auto;
+  padding: 0.5em;
+  border: 1px dotted #765636;
+}
+
+.row {
+  display: flex;
+}
+
+.row img {
+  max-width: 15vw;
+}
