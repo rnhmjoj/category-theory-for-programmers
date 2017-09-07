@@ -1,0 +1,15 @@
+% center images
+\usepackage[export]{adjustbox}
+\LetLtxMacro{\OldIncludegraphics}{\includegraphics}
+\renewcommand{\includegraphics}[2][]{
+  \begin{center}
+    \OldIncludegraphics[max width=8cm,max height=4cm,#1]{#2}
+  \end{center}
+}
+
+% avoid that figures get a whole page
+\renewcommand{\floatpagefraction}{.8}%
+
+% start new page with each section
+\usepackage{etoolbox}
+\pretocmd{\section}{\clearpage}{}{}

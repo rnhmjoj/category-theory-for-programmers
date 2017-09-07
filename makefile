@@ -1,12 +1,26 @@
-title = 'category-theory-for-programmers'
+title = category-theory-for-programmers
 
 root = $(shell pwd)
 src  = $(root)/src
 
 chapters = $(shell find $(src)/part-* -name '*.html' | sort -V)
 
-book:
-	cd $(src)/init;             \
+all: $(title).epub $(title).pdf
+
+$(title).pdf:
+	@ cd $(src)/init;           \
+	pandoc                      \
+		$(src)/init/preface.html  \
+		$(chapters)               \
+		--smart                   \
+		--toc                     \
+		--number-section          \
+		--latex-engine=xelatex    \
+		-H $(root)/pandoc/options.tex \
+		-o $(root)/$(title).pdf
+
+$(title).epub:
+	@ cd $(src)/init;           \
 	pandoc                      \
 		$(src)/init/preface.html  \
 		$(chapters)               \
