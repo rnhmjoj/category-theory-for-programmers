@@ -16,6 +16,7 @@ $(title).pdf:
 		--toc                     \
 		--number-section          \
 		--latex-engine=xelatex    \
+		--data-dir=$(root)/pandoc \
 		-H $(root)/pandoc/options.tex \
 		-o $(root)/$(title).pdf
 
@@ -31,3 +32,6 @@ $(title).epub:
 		--epub-cover-image=$(root)/pandoc/cover.png \
 		--epub-embed-font='$(src)/fonts/*.woff'     \
 		-o $(root)/$(title).epub
+
+clean:
+	rm $(root)/$(title).{pdf,epub}
