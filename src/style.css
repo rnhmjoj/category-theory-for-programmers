@@ -61,7 +61,7 @@ pre {
 }
 
 .box {
-  width: 40vw;
+  width: 80%;
   margin: auto;
   padding: 0.5em;
   border: 1px dotted #765636;
@@ -72,5 +72,5 @@ pre {
 }
 
 .row img {
-  max-width: 15vw;
+  max-width: 20%;
 }
