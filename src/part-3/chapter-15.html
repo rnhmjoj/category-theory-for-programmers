@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <h1>Monads, Monoids, and Categories</h1>
+  <p>There is no good place to end a book on category theory. There's always more to learn. Category theory is a vast subject. At the same time, it's obvious that the same themes, concepts, and patterns keep showing up over and over again. There is a saying that all concepts are Kan extensions and, indeed, you can use Kan extensions to derive limits, colimits, adjunctions, monads, the Yoneda lemma, and much more. The notion of a category itself arises at all levels of abstraction, and so does the concept of a monoid and a monad. Which one is the most basic? As it turns out they are all interrelated, one leading to another in a never-ending cycle of abstractions. I decided that showing these interconnections might be a good way to end this book.</p>
+
+  <h2>Bicategories</h2>
+  <p>One of the most difficult aspects of category theory is the constant switching of perspectives. Take the category of sets, for instance. We are used to defining sets in terms of elements. An empty set has no elements. A singleton set has one element. A cartesian product of two sets is a set of pairs, and so on. But when talking about the category <b>Set</b> I asked you to forget about the contents of sets and instead concentrate on morphisms (arrows) between them. You were allowed, from time to time, to peek under the covers to see what a particular universal construction in <b>Set</b> described in terms of elements. The terminal object turned out to be a set with one element, and so on. But these were just sanity checks.</p>
+  <p>A functor is defined as a mapping of categories. It's natural to consider a mapping as a morphism in a category. A functor turned out to be a morphism in the category of categories (small categories, if we want to avoid questions about size). By treating a functor as an arrow, we forfeit the information about its action on the internals of a category (its objects and morphisms), just like we forfeit the information about the action of a function on elements of a set when we treat it as an arrow in <b>Set</b>. But functors between any two categories also form a category. This time you are asked to consider something that was an arrow in one category to be an object in another. In a functor category functors are objects and natural transformations are morphisms. We have discovered that the same thing can be an arrow in one category and an object in another. The naive view of objects as nouns and arrows as verbs doesn't hold.</p>
+  <p>Instead of switching between two views, we can try to merge them into one. This is how we get the concept of a 2-category, in which objects are called 0-cells, morphisms are 1-cells, and morphisms between morphisms are 2-cells.</p>
+  <figure>
+    <img src="../images/8EF2CEB121.png" alt="2-Category">
+    <figcaption>0-cells a, b; 1-cells f, g; and a 2-cell α.</figcaption>
+  </figure>
+  <p>The category of categories <b>Cat</b> is an immediate example. We have categories as 0-cells, functors as 1-cells, and natural transformations as 2-cells. The laws of a 2-category tell us that 1-cells between any two 0-cells form a category (in other words, <code>C(a, b)</code> is a hom-category rather than a hom-set). This fits nicely with our earlier assertion that functors between any two categories form a functor category.</p>
+  <p>In particular, 1-cells from any 0-cell back to itself also form a category, the hom-category <code>C(a, a)</code>; but that category has even more structure. Members of <code>C(a, a)</code> can be viewed as arrows in <b>C</b> or as objects in <code>C(a, a)</code>. As arrows, they can be composed with each other. But when we look at them as objects, the composition becomes a mapping from a pair of objects to an object. In fact it looks very much like a product — a tensor product to be precise. This tensor product has a unit: the identity 1-cell. It turns out that, in any 2-category, a hom-category <code>C(a, a)</code> is automatically a monoidal category with the tensor product defined as composition of 1-cells. Associativity and unit laws simply fall out from the corresponding category laws.</p>
+  <p>Let's see what this means in our canonical example of a 2-category <b>Cat</b>. The hom-category <code>Cat(a, a)</code> is the category of endofunctors on <code>a</code>. Endofunctor composition plays the role of a tensor product in it. The identity functor is the unit with respect to this product. We've seen before that endofunctors form a monoidal category (we used this fact in the definition of a monad), but now we see that this is a more general phenomenon: endo-1-cells in any 2-category form a monoidal category. We'll come back to it later when we generalize monads.</p>
+  <p>You might recall that, in a general monoidal category, we did not insist on the monoid laws being satisfied on the nose. It was often enough for the unit laws and the associativity laws to be satisfied up to isomorphism. In a 2-category, monoidal laws in <code>C(a, a)</code> follow from composition laws for 1-cells. These laws are strict, so we will always get a strict monoidal category. It is, however, possible to relax these laws as well. We can say, for instance, that a composition of the identity 1-cell <code>id<sub>a</sub></code> with another 1-cell, <code>f :: a -&gt; b</code>, is isomorphic, rather than equal, to <code>f</code>. Isomorphism of 1-cells is defined using 2-cells. In other words, there is a 2-cell:</p>
+  <pre>ρ :: f ∘ id<sub>a</sub> -&gt; f</pre>
+  <p>that has an inverse.</p>
+  <figure>
+    <img src="../images/9A64A983CA.png" alt="Bicategory">
+    <figcaption>Identity law in a bicategory holds up to isomorphism (an invertible 2-cell ρ).</figcaption>
+  </figure>
+  <p>We can do the same for the left identity and associativity laws. This kind of relaxed 2-category is called a bicategory (there are some additional coherency laws, which I will omit here).</p>
+  <p>As expected, endo-1-cells in a bicategory form a general monoidal category with non-strict laws.</p>
+  <p>An interesting example of a bicategory is the category of spans. A span between two objects <code>a</code> and <code>b</code> is an object <code>x</code> and a pair of morphisms:</p>
+  <pre>f :: x -&gt; a
+g :: x -&gt; b</pre>
+  <figure>
+  <img src="../images/59F3CE313E.png" alt="Span">
+  </figure>
+  You might recall that we used spans in the definition of a categorical product. Here, we want to look at spans as 1-cells in a bicategory. The first step is to define a composition of spans. Suppose that we have an adjoining span:</p>
+  <pre>f':: y -&gt; b
+g':: y -&gt; c</pre>
+  <figure>
+    <img src="../images/588BC77D1B.png" alt="Span composition">
+  </figure>
+  The composition would be a third span, with some apex <code>z</code>. The most natural choice for it is the pullback of <code>g</code> along <code>f'</code>. Remember that a pullback is the object <code>z</code> together with two morphisms:</p>
+  <pre>h :: z -&gt; x
+h':: z -&gt; y</pre>
+  <p>such that:</p>
+  <pre>g ∘ h = f' ∘ h'</pre>
+  <p>which is universal among all such objects.</p>
+  <figure>
+    <img src="../images/CC6EFF4BD8.png" alt="Pullback span">
+  </figure>
+  For now, let's concentrate on spans over the category of sets. In that case, the pullback is just a set of pairs <code>(p, q)</code> from the cartesian product <code>x × y</code> such that:</p>
+  <pre>g p = f' q</pre>
+  <p>A morphism between two spans that share the same endpoints is defined as a morphism <code>h</code> between their apices, such that the appropriate triangles commute.</p>
+  <figure>
+    <img src="../images/DE59E4C0AE.png" alt="Morphism between spans">
+  </figure>
+  <p>To summarize, in the bicategory <b>Span</b>: 0-cells are sets, 1-cells are spans, 2-cells are span morphisms. An identity 1-cell is a degenerate span in which all three objects are the same, and the two morphisms are identities.</p>
+  <p>We've seen another example of a bicategory before: the bicategory <b>Prof</b> of <a href="chapter-10.html">profunctors</a>, where 0-cells are categories, 1-cells are profunctors, and 2-cells are natural transformations. The composition of profunctors was given by a coend.</p>
+
+  <h2>Monads</h2>
+  <p>By now you should be pretty familiar with the definition of a monad as a monoid in the category of endofunctors. Let's revisit this definition with the new understanding that the category of endofunctors is just one small hom-category of endo-1-cells in the bicategory <b>Cat</b>. We know it's a monoidal category: the tensor product comes from the composition of endofunctors. A monoid is defined as an object in a monoidal category — here it will be an endofunctor <code>T</code> — together with two morphisms. Morphisms between endofunctors are natural transformations. One morphism maps the monoidal unit — the identity endofunctor — to <code>T</code>:</p>
+  <pre>η :: I -&gt; T</pre>
+  <p>The second morphism maps the tensor product of <code>T ⊗ T</code> to <code>T</code>. The tensor product is given by endofunctor composition, so we get:</p>
+  <pre>μ :: T ∘ T -&gt; T</pre>
+  <figure>
+    <img src="../images/DE6DC89B1F.png" alt="Monad">
+  </figure>
+  We recognize these as the two operations defining a monad (they are called <code>return</code> and <code>join</code> in Haskell), and we know that monoid laws turn to monad laws.</p>
+  <p>Now let's remove all mention of endofunctors from this definition. We start with a bicategory <code>C</code> and pick a 0-cell <code>a</code> in it. As we've seen earlier, the hom-category <code>C(a, a)</code> is a monoidal category. We can therefore define a monoid in <code>C(a, a)</code> by picking a 1-cell, <code>T</code>, and two 2-cells:</p>
+  <pre>η :: I -&gt; T
+μ :: T ∘ T -&gt; T</pre>
+  <p>satisfying the monoid laws. We call <i>this</i> a monad.</p>
+  <figure>
+    <img src="../images/FCD40C8F2B.png" alt="Bimonad">
+  </figure>
+  That's a much more general definition of a monad using only 0-cells, 1-cells, and 2-cells. It reduces to the usual monad when applied to the bicategory <b>Cat</b>. But let's see what happens in other bicategories.</p>
+  <p>Let's construct a monad in <b>Span</b>. We pick a 0-cell, which is a set that, for reasons that will become clear soon, I will call <code>Ob</code>. Next, we pick an endo-1-cell: a span from <code>Ob</code> back to <code>Ob</code>. It has a set at the apex, which I will call <code>Ar</code>, equipped with two functions:</p>
+  <pre>dom :: Ar -&gt; Ob
+cod :: Ar -&gt; Ob</pre>
+  <figure>
+    <img src="../images/EA91CA1C3B.png" alt="Span monad">
+  </figure>
+  Let's call the elements of the set <code>Ar</code> “arrows.” If I also tell you to call the elements of <code>Ob</code> “objects,” you might get a hint where this is leading to. The two functions <code>dom</code> and <code>cod</code> assign the domain and the codomain to an “arrow.”</p>
+  <p>To make our span into a monad, we need two 2-cells, <code>η</code> and <code>μ</code>. The monoidal unit, in this case, is the trivial span from <code>Ob</code> to <code>Ob</code> with the apex at <code>Ob</code> and two identity functions. The 2-cell <code>η</code> is a function between the apices <code>Ob</code> and <code>Arr</code>. In other words, <code>η</code> assigns an “arrow” to every “object.” A 2-cell in <b>Span</b> must satisfy commutation conditions — in this case:</p>
+  <pre>dom ∘ η = id
+cod ∘ η = id</pre>
+  <figure>
+    <img src="../images/87F39A4BB9.png" alt="Span unit">
+  </figure>
+  In components, this becomes:</p>
+  <pre>dom (η ob) = ob = cod (η ob)</pre>
+  <p>where <code>ob</code> is an “object” in <code>Ob</code>. In other words, <code>η</code> assigns to every “object” and “arrow” whose domain and codomain are that “object.” We'll call this special “arrow” the “identity arrow.”</p>
+  <p>The second 2-cell <code>μ</code> acts on the composition of the span <code>Ar</code> with itself. The composition is defined as a pullback, so its elements are pairs of elements from <code>Ar</code> — pairs of “arrows” <code>(a<sub>1</sub>, a<sub>2</sub>)</code>. The pullback condition is:</p>
+  <pre>cod a<sub>1</sub> = dom a<sub>2</sub></pre>
+  <p>We say that <code>a<sub>1</sub></code> and <code>a<sub>1</sub></code> are “composable,” because the domain of one is the codomain of the other.<br />
+  <figure>
+    <img src="../images/E2BC3FC908.png" alt="Span mul">
+  </figure>
+  <p>The 2-cell <code>μ</code> is a function that maps a pair of composable arrows <code>(a<sub>1</sub>, a<sub>2</sub>)</code> to a single arrow <code>a<sub>3</sub></code> from <code>Ar</code>. In other words <code>μ</code> defines composition of arrows.</p>
+  <p>It's easy to check that monad laws correspond to identity and associativity laws for arrows. We have just defined a category (a small category, mind you, in which objects and arrows form sets).</p>
+  <p>So, all told, a category is just a monad in the bicategory of spans.</p>
+  <p>What is amazing about this result is that it puts categories on the same footing as other algebraic structures like monads and monoids. There is nothing special about being a category. It's just two sets and four functions. In fact we don't even need a separate set for objects, because objects can be identified with identity arrows (they are in one-to-one correspondence). So it's really just a set and a few functions. Considering the pivotal role that category theory plays in all of mathematics, this is a very humbling realization.</p>
+
+  <h2>Challenges</h2>
+  <ol>
+    <li>Derive unit and associativity laws for the tensor product defined as composition of endo-1-cells in a bicategory.</li>
+    <li>Check that monad laws for a monad in <b>Span</b> correspond to identity and associativity laws in the resulting category.</li>
+    <li>Show that a monad in <b>Prof</b> is an identity-on-objects functor.</li>
+    <li>What's a monad algebra for a monad in <b>Span</b>?</li>
+  </ol>
+
+  <h2>Bibliography</h2>
+  <ol>
+    <li><a href="https://graphicallinearalgebra.net/2017/04/16/a-monoid-is-a-category-a-category-is-a-monad-a-monad-is-a-monoid/">Paweł Sobociński's blog.</a></li>
+  </ol>
+</body>
+
+</html>
