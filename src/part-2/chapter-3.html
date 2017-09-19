@@ -33,7 +33,7 @@
   <p>It states that an empty list <code>[]</code> is the unit element, and list concatenation <code>(++)</code> is the binary operation.</p>
   <p>As we have seen, a list of type <code>a</code> corresponds to a free monoid with the set <code>a</code> serving as generators. The set of natural numbers with multiplication is not a free monoid, because we identify lots of products. Compare for instance:</p>
   <pre>2 * 3 = 6
-  [2] ++ [3] = [2, 3] // not the same as [6]</pre>
+[2] ++ [3] = [2, 3] // not the same as [6]</pre>
   <p>That was easy, but the question is, can we perform this free construction in category theory, where we are not allowed to look inside objects? We'll use our workhorse: the universal construction.</p>
   <p>The second interesting question is, can any monoid be obtained from some free monoid by identifying more than the minimum number of elements required by the laws? I'll show you that this follows directly from the universal construction.</p>
 

@@ -99,13 +99,13 @@ greet = catstr “Hello “</pre>
   <pre>(a, b) -&gt; c</pre>
   <p>It's trivial to convert between the two representations, and the two (higher-order) functions that do it are called, unsurprisingly, <code>curry</code> and <code>uncurry</code>:</p>
   <pre>curry :: ((a, b)-&gt;c) -&gt; (a-&gt;b-&gt;c)
-  curry f a b = f (a, b)</pre>
+curry f a b = f (a, b)</pre>
   <p>and</p>
   <pre>uncurry :: (a-&gt;b-&gt;c) -&gt; ((a, b)-&gt;c)
 uncurry f (a, b) = f a b</pre>
   <p>Notice that <code>curry</code> is the <em>factorizer</em> for the universal construction of the function object. This is especially apparent if it's rewritten in this form:</p>
   <pre>factorizer :: ((a, b)-&gt;c) -&gt; (a-&gt;(b-&gt;c))
-  factorizer g = \a -&gt; (\b -&gt; g (a, b))</pre>
+factorizer g = \a -&gt; (\b -&gt; g (a, b))</pre>
   <p>(As a reminder: A factorizer produces the factorizing function from a candidate.)</p>
   <p>In non-functional languages, like C++, currying is possible but nontrivial. You can think of multi-argument functions in C++ as corresponding to Haskell functions taking tuples (although, to confuse things even more, in C++ you can define functions that take an explicit <code>std::tuple</code>, as well as variadic functions, and functions taking initializer lists).</p>
   <p>You can partially apply a C++ function using the template <code>std::bind</code>. For instance, given a function of two strings:</p>
@@ -115,8 +115,8 @@ uncurry f (a, b) = f a b</pre>
   <p>you can define a function of one string:</p>
   <pre>using namespace std::placeholders;
 
-  auto greet = std::bind(catstr, "Hello ", _1);
-  std::cout &lt;&lt; greet("Haskell Curry");</pre>
+auto greet = std::bind(catstr, "Hello ", _1);
+std::cout &lt;&lt; greet("Haskell Curry");</pre>
   <p>Scala, which is more functional than C++ or Java, falls somewhere in between. If you anticipate that the function you’re defining will be partially applied, you define it with multiple argument lists:</p>
   <pre>def catstr(s1: String)(s2: String) = s1 + s2</pre>
   <p>Of course that requires some amount of foresight or prescience on the part of a library writer.</p>
@@ -202,7 +202,7 @@ eval (f, x) = f x</pre>
   <p>Finally, we come to the meaning of the <code>absurd</code> function:</p>
   <pre>absurd :: Void -&gt; a</pre>
   <p>Considering that <code>Void</code> translates into false, we get:</p>
-  <pre> false ⇒ a</pre>
+  <pre>false ⇒ a</pre>
   <p>Anything follows from falsehood (<em>ex falso quodlibet</em>). Here's one possible proof (implementation) of this statement (function) in Haskell:</p>
   <pre>absurd (Void a) = absurd a</pre>
   <p>where <code>Void</code> is defined as:</p>

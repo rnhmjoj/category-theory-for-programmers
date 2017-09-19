@@ -38,10 +38,10 @@
   <p>may return <code>True</code>, <code>False</code>, or <code>_|_</code>; the latter meaning that it would never terminate.</p>
   <p>Interestingly, once you accept the bottom as part of the type system, it is convenient to treat every runtime error as a bottom, and even allow functions to return the bottom explicitly. The latter is usually done using the expression <code>undefined</code>, as in:</p>
   <pre>f :: Bool -> Bool
-  f x = undefined</pre>
+f x = undefined</pre>
   <p>This definition type checks because <code>undefined</code> evaluates to bottom, which is a member of any type, including <code>Bool</code>. You can even write:</p>
   <pre>f :: Bool -> Bool
-  f = undefined</pre>
+f = undefined</pre>
   <p>(without the <code>x</code>) because the bottom is also a member of the type <code>Bool->Bool</code>.</p>
   <p>Functions that may return bottom are called partial, as opposed to total functions, which return valid results for every possible argument.</p>
   <p>Because of the bottom, you’ll see the category of Haskell types and functions referred to as <strong>Hask</strong> rather than <strong>Set</strong>. From the theoretical point of view, this is the source of never-ending complications, so at this point I will use my butcher’s knife and terminate this line of reasoning. From the pragmatic point of view, it’s okay to ignore non-terminating functions and bottoms, and treat <strong>Hask</strong> as bona fide <strong>Set</strong> (see Bibliography at the end).</p>
@@ -81,31 +81,31 @@
   <pre>int f44() { return 44; }</pre>
   <p>You might think of this function as taking “nothing”, but as we’ve just seen, a function that takes “nothing” can never be called because there is no value representing “nothing.” So what does this function take? Conceptually, it takes a dummy value of which there is only one instance ever, so we don’t have to mention it explicitly. In Haskell, however, there is a symbol for this value: an empty pair of parentheses, <code>()</code>. So, by a funny coincidence (or is it a coincidence?), the call to a function of void looks the same in C++ and in Haskell. Also, because of the Haskell’s love of terseness, the same symbol <code>()</code> is used for the type, the constructor, and the only value corresponding to a singleton set. So here’s this function in Haskell:</p>
   <pre>f44 :: () -> Integer
-  f44 () = 44</pre>
+f44 () = 44</pre>
   <p>The first line declares that <code>f44</code> takes the type <code>()</code>, pronounced “unit,” into the type <code>Integer</code>. The second line defines <code>f44</code> by pattern matching the only constructor for unit, namely <code>()</code>, and producing the number 44. You call this function by providing the unit value <code>()</code>:</p>
   <pre>f44 ()</pre>
   <p>Notice that every function of unit is equivalent to picking a single element from the target type (here, picking the <code>Integer</code> 44). In fact you could think of <code>f44</code> as a different representation for the number 44. This is an example of how we can replace explicit mention of elements of a set by talking about functions (arrows) instead. Functions from unit to any type A are in one-to-one correspondence with the elements of that set A.</p>
   <p>What about functions with the <code>void</code> return type, or, in Haskell, with the unit return type? In C++ such functions are used for side effects, but we know that these are not real functions in the mathematical sense of the word. A pure function that returns unit does nothing: it discards its argument.</p>
   <p>Mathematically, a function from a set A to a singleton set maps every element of A to the single element of that singleton set. For every A there is exactly one such function. Here’s this function for <code>Integer</code>:</p>
   <pre>fInt :: Integer -> ()
-  fInt x = ()</pre>
+fInt x = ()</pre>
   <p>You give it any integer, and it gives you back a unit. In the spirit of terseness, Haskell lets you use the wildcard pattern, the underscore, for an argument that is discarded. This way you don’t have to invent a name for it. So the above can be rewritten as:</p>
   <pre>fInt :: Integer -> ()
-  fInt _ = ()</pre>
+fInt _ = ()</pre>
   <p>Notice that the implementation of this function not only doesn’t depend on the value passed to it, but it doesn’t even depend on the type of the argument.</p>
   <p>Functions that can be implemented with the same formula for any type are called parametrically polymorphic. You can implement a whole family of such functions with one equation using a type parameter instead of a concrete type. What should we call a polymorphic function from any type to unit type? Of course we’ll call it <code>unit</code>:</p>
   <pre>unit :: a -> ()
-  unit _ = ()</pre>
+unit _ = ()</pre>
   <p>In C++ you would write this function as:</p>
   <pre>template<class T>
-  void unit(T) {}</pre>
+void unit(T) {}</pre>
   <p>Next in the typology of types is a two-element set. In C++ it’s called <code>bool</code> and in Haskell, predictably, <code>Bool</code>. The difference is that in C++ <code>bool</code> is a built-in type, whereas in Haskell it can be defined as follows:</p>
   <pre>data Bool = True | False</pre>
   <p>(The way to read this definition is that <code>Bool</code> is either <code>True</code> or <code>False</code>.) In principle, one should also be able to define a Boolean type in C++ as an enumeration:</p>
   <pre>enum bool {
-      true,
-      false
-  };</pre>
+    true,
+    false
+};</pre>
   <p>but C++ <code>enum</code> is secretly an integer. The C++11 “<code>enum class</code>” could have been used instead, but then you would have to qualify its values with the class name, as in <code>bool::true</code> and <code>bool::false</code>, not to mention having to include the appropriate header in every file that uses it.</p>
   <p>Pure functions from <code>Bool</code> just pick two values from the target type, one corresponding to <code>True</code> and another to <code>False</code>.</p>
   <p>Functions to <code>Bool</code> are called <i>predicates</i>. For instance, the Haskell library <code>Data.Char</code> is full of predicates like <code>isAlpha</code> or <code>isDigit</code>. In C++ there is a similar library <code></code> that defines, among others, <code>isalpha</code> and <code>isdigit</code>, but these return an <code>int</code> rather than a Boolean. The actual predicates are defined in <code>std::ctype</code> and have the form <code>ctype::is(alpha, c)</code>, <code>ctype::is(digit, c)</code>, etc.</p>

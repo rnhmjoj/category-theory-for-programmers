@@ -44,7 +44,7 @@
   <p>We have already seen this contravariant functor in Haskell. We called it <code>Op</code>:</p>
   <pre>type Op a x = x -&gt; a</pre>
   <pre>instance Contravariant (Op a) where
-      contramap f h = h . f</pre>
+    contramap f h = h . f</pre>
   <p>Finally, if we let both objects vary, we get a profunctor <code>C(-, =)</code>, which is contravariant in the first argument and covariant in the second (to underline the fact that the two arguments may vary independently, we use a double dash as the second placeholder). We have seen this profunctor before, when we talked about functoriality:</p>
   <pre>instance Profunctor (-&gt;) where
     dimap ab cd bc = cd . bc . ab
@@ -77,7 +77,7 @@
   <p>We will see later that a natural transformation from <code>C(a, -)</code> to any <b>Set</b>-valued functor always exists (Yoneda's lemma) but it is not necessarily invertible. </p>
   <p>Let me give you an example in Haskell with the list functor and <code>Int</code> as <code>a</code>. Here's a natural transformation that does the job:</p>
   <pre>alpha :: forall x. (Int -&gt; x) -&gt; [x]
-  alpha h = map h [12]</pre>
+alpha h = map h [12]</pre>
   <p>I have arbitrarily picked the number 12 and created a singleton list with it. I can then <code>fmap</code> the function <code>h</code> over this list and get a list of the type returned by <code>h</code>. (There are actually as many such transformations as there are list of integers.) </p>
   <p>The naturality condition is equivalent to the composability of <code>map</code> (the list version of <code>fmap</code>):</p>
   <pre>map f (map h [12]) = map (f . h) [12]</pre>
@@ -86,18 +86,18 @@
   <p>You might think of retrieving an <code>x</code> from the list, e.g., using <code>head</code>, but that won't work for an empty list. Notice that there is no choice for the type <code>a</code> (in place of <code>Int</code>) that would work here. So the list functor is not representable.</p>
   <p>Remember when we talked about Haskell (endo-) functors being a little like containers? In the same vein we can think of representable functors as containers for storing memoized results of function calls (the members of hom-sets in Haskell are just functions). The representing object, the type <code>a</code> in <code>C(a, -)</code>, is thought of as the key type, with which we can access the tabulated values of a function. The transformation we called &alpha; is called <code>tabulate</code>, and its inverse, &beta;, is called <code>index</code>. Here's a (slightly simplified) <code>Representable</code> class definition:</p>
   <pre>class Representable f where
-     type Rep f :: *
-     tabulate :: (Rep f -&gt; x) -&gt; f x
-     index    :: f x -&gt; Rep f -&gt; x</pre>
+    type Rep f :: *
+    tabulate :: (Rep f -&gt; x) -&gt; f x
+    index    :: f x -&gt; Rep f -&gt; x</pre>
   <p>Notice that the representing type, our <code>a</code>, which is called <code>Rep f</code> here, is part of the definition of <code>Representable</code>. The star just means that <code>Rep f</code> is a type (as opposed to a type constructor, or other more exotic kinds).</p>
   <p>Infinite lists, or streams, which cannot be empty, are representable. </p>
   <pre>data Stream x = Cons x (Stream x)</pre>
   <p>You can think of them as memoized values of a function taking an <code>Integer</code> as an argument. (Strictly speaking, I should be using non-negative natural numbers, but I didn't want to complicate the code.) </p>
   <p>To <code>tabulate</code> such a function, you create an infinite stream of values. Of course, this is only possible because Haskell is lazy. The values are evaluated on demand. You access the memoized values using <code>index</code>:</p>
   <pre>instance Representable Stream where
-      type Rep Stream = Integer
-      tabulate f = Cons (f 0) (tabulate (f . (+1)))
-      index (Cons b bs) n = if n == 0 then b else index bs (n - 1)</pre>
+    type Rep Stream = Integer
+    tabulate f = Cons (f 0) (tabulate (f . (+1)))
+    index (Cons b bs) n = if n == 0 then b else index bs (n - 1)</pre>
   <p>It's interesting that you can implement a single memoization scheme to cover a whole family of functions with arbitrary return types.</p>
   <p>Representability for contravariant functors is similarly defined, except that we keep the second argument of <code>C(-, a)</code> fixed. Or, equivalently, we may consider functors from <i>C</i><sup>op</sup> to <b>Set</b>, because <code>C<sup>op</sup>(a, -)</code> is the same as <code>C(-, a)</code>.</p>
   <p>There is an interesting twist to representability. Remember that hom-sets can internally be treated as exponential objects, in cartesian closed categories. The hom-set <code>C(a, x)</code> is equivalent to <code>x<sup>a</sup></code>, and for a representable functor <code>F</code> we can write:</p>
